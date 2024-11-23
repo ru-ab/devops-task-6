@@ -4,11 +4,13 @@ pipeline {
     stages {
         stage('1-Tests') {
             steps {
-                echo 'Install dependencies...'
-                sh 'npm ci'
-                echo 'Run tests...'
-                sh 'npm run test'
-                echo 'Done.'
+                nodejs('Node_22') {
+                  echo 'Install dependencies...'
+                  sh 'npm ci'
+                  echo 'Run tests...'
+                  sh 'npm run test'
+                  echo 'Done.'
+                }
             }
         }
     }
