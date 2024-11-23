@@ -14,6 +14,9 @@ pipeline {
             }
         }
         stage('2-SonarQube') {
+            environment {
+              SONAR_SCANNER_OPTS = "-Xmx2048m"
+            } 
             steps {
                 script {
                     def scannerHome = tool 'SonarQube Scanner'
