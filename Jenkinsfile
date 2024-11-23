@@ -5,9 +5,9 @@ pipeline {
         stage('1-Tests') {
             steps {
                 echo 'Install dependencies...'
-                npm ci
+                sh 'npm ci'
                 echo 'Run tests...'
-                npm run test
+                sh 'npm run test'
                 echo 'Done.'
             }
         }
