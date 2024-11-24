@@ -63,7 +63,7 @@ pipeline {
             }
             steps {
                 container(name: 'kaniko', shell: '/busybox/sh') {
-                  sh 'cat ~/.docker/config.json'
+                  sh 'ls /root/.aws/'
                   sh 'ls /kaniko/.docker'
                   sh '''#!/busybox/sh
                     /kaniko/executor --context `pwd` --dockerfile Dockerfile --verbosity debug --destination 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6
