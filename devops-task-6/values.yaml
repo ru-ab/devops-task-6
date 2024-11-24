@@ -1,4 +1,3 @@
-# values.yaml
 replicaCount: 1
 
 image:
@@ -10,8 +9,8 @@ imagePullSecrets:
   - name: aws-secret
 
 service:
-  type: ClusterIP
-  port: 80
+  type: LoadBalancer
+  port: 3000
 
 resources: {}
 
