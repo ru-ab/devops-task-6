@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6:latest
+  repository: 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6
   tag: latest
   pullPolicy: Always
 
