@@ -1,0 +1,22 @@
+# values.yaml
+replicaCount: 1
+
+image:
+  repository: 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6:latest
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: aws-secret
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
