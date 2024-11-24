@@ -69,11 +69,6 @@ pipeline {
             steps {
                 container(name: 'kaniko', shell: '/busybox/sh') {
                   sh '''#!/busybox/sh
-                      dockerConfig=\${DOCKER_CONFIG:-/kaniko/.docker}
-                      [ -d \${dockerConfig} ] && echo "Docker directory Exists" || mkdir -p \${dockerConfig}
-                      echo '{"credsStore":"ecr-login"}' > \${dockerConfig}/config.json
-                  '''
-                  sh '''#!/busybox/sh
                     /kaniko/executor --context `pwd` --dockerfile Dockerfile --verbosity debug --destination 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6
                   '''
                 }
