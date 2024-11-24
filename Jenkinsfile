@@ -30,11 +30,9 @@ pipeline {
                 command:
                 - cat
                 tty: true
-              - name: aws-cli
-                image: amazon/aws-cli:latest
-                command:
-                - cat
-                tty: true
+                volumeMounts:
+                - name: docker-config
+                  mountPath: /root/.docker
               restartPolicy: Never
               volumes:
               - name: docker-config
@@ -86,11 +84,6 @@ pipeline {
         // }
         stage('4-Deploy') {
             steps {
-                container('aws-cli') {
-                    sh """
-                        aws ecr get-login-password --region us-east-2 | helm registry login --username AWS --password-stdin 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6
-                    """
-                }
                 container('helm') {
                     sh 'helm upgrade --install devops-task-6 ./devops-task-6'
                 }
