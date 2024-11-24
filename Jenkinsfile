@@ -25,6 +25,11 @@ pipeline {
                   value: true
                 - name: AWS_SDK_LOAD_CONFIG
                   value: true
+              - name: helm
+                image: alpine/helm:3.12.0
+                command:
+                - cat
+                tty: true
               restartPolicy: Never
               volumes:
               - name: docker-config
@@ -76,7 +81,7 @@ pipeline {
         // }
         stage('4-Deploy') {
             steps {
-                script {
+                container('helm') {
                     sh 'helm upgrade --install devops-task-6 ./devops-task-6'
                 }
             }
