@@ -62,15 +62,22 @@ pipeline {
         //         }
         //     }
         // }
-        stage('3-Build-Container') {
-            environment {
-                PATH = "/busybox:/kaniko:$PATH"
-            }
+        // stage('3-Build-Container') {
+        //     environment {
+        //         PATH = "/busybox:/kaniko:$PATH"
+        //     }
+        //     steps {
+        //         container(name: 'kaniko', shell: '/busybox/sh') {
+        //           sh '''#!/busybox/sh
+        //             /kaniko/executor --context `pwd` --dockerfile Dockerfile --verbosity debug --destination=156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6:latest
+        //           '''
+        //         }
+        //     }
+        // }
+        stage('4-Deploy') {
             steps {
-                container(name: 'kaniko', shell: '/busybox/sh') {
-                  sh '''#!/busybox/sh
-                    /kaniko/executor --context `pwd` --dockerfile Dockerfile --verbosity debug --destination=156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6:latest
-                  '''
+                script {
+                    sh 'helm upgrade --install devops-task-6 ./devops-task-6'
                 }
             }
         }
