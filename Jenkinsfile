@@ -20,6 +20,11 @@ pipeline {
                   mountPath: /kaniko/.docker/
                 - name: aws-secret
                   mountPath: /root/.aws/
+                env:
+                - name: AWS_EC2_METADATA_DISABLED
+                  value: true
+                - name: AWS_SDK_LOAD_CONFIG
+                  value: true
               restartPolicy: Never
               volumes:
               - name: docker-config
@@ -63,8 +68,11 @@ pipeline {
             }
             steps {
                 container(name: 'kaniko', shell: '/busybox/sh') {
-                  sh 'ls /root/.aws/'
-                  sh 'ls /kaniko/.docker'
+                  sh '''#!/busybox/sh
+                      dockerConfig=\${DOCKER_CONFIG:-/kaniko/.docker}
+                      [ -d \${dockerConfig} ] && echo "Docker directory Exists" || mkdir -p \${dockerConfig}
+                      echo '{"credsStore":"ecr-login"}' > \${dockerConfig}/config.json
+                  '''
                   sh '''#!/busybox/sh
                     /kaniko/executor --context `pwd` --dockerfile Dockerfile --verbosity debug --destination 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6
                   '''
