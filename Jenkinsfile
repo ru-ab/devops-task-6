@@ -15,8 +15,7 @@ pipeline {
         }
         stage('2-SonarQube') {
             environment {
-              SONAR_SCANNER_OPTS = "-Xmx4G -Xms2G"
-              SONAR_SCANNER_JAVA_OPTS = "-Xmx4G -Xms2G"
+              SONAR_SCANNER_OPTS = "-Xmx2G -Xms1G"
             } 
             steps {
                 script {
