@@ -91,4 +91,12 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            mail(body: 'Build Success', subject: '[Success] Email From Jenkins Pipeline', to: 'ruabdrakhmanov@gmail.com')
+        }
+        failure {
+            mail(body: 'Build Failure', subject: '[Failure] Email From Jenkins Pipeline', to: 'ruabdrakhmanov@gmail.com')
+        }
+    }
 }
