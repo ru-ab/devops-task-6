@@ -1,5 +1,36 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+          yaml """
+            kind: Pod
+            metadata:
+              name: kaniko
+            spec:
+              containers:
+              - name: jnlp
+                workingDir: /home/jenkins
+              - name: kaniko
+                workingDir: /home/jenkins
+                image: gcr.io/kaniko-project/executor:debug
+                command:
+                - /busybox/cat
+                tty: true
+                volumeMounts:
+                - name: docker-config
+                  mountPath: /kaniko/.docker/
+                - name: aws-secret
+                  mountPath: /root/.aws/
+              restartPolicy: Never
+              volumes:
+              - name: docker-config
+                configMap:
+                  name: docker-config 
+              - name: aws-secret
+                secret:
+                  secretName: aws-secret
+          """
+        }
+    }
 
     stages {
         // stage('1-Tests') {
@@ -27,16 +58,17 @@ pipeline {
         //     }
         // }
         stage('3-Build-Container') {
+            environment {
+                PATH = "/busybox:/kaniko:$PATH"
+            }
             steps {
-                container('kaniko') {
-                    script {
-                        sh '''
-                            /kaniko/executor --dockerfile `pwd`/Dockerfile \
-                                             --context `pwd` \
-                                             --destination 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6
-                        '''
-                    }
-              } 
+                container(name: 'kaniko', shell: '/busybox/sh') {
+
+
+                  sh '''#!/busybox/sh
+                    /kaniko/executor --context `pwd` --dockerfile Dockerfile --verbosity debug --destination 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6:latestv1
+                  '''
+                }
             }
         }
     }
