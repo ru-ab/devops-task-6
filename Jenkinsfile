@@ -13,17 +13,30 @@ pipeline {
         //         }
         //     }
         // }
-        stage('2-SonarQube') {
-            environment {
-              SONAR_SCANNER_OPTS = "-Xmx2G -Xms1G"
-            } 
+        // stage('2-SonarQube') {
+        //     environment {
+        //       SONAR_SCANNER_OPTS = "-Xmx2G -Xms1G"
+        //     } 
+        //     steps {
+        //         script {
+        //             def scannerHome = tool 'SonarQube Scanner'
+        //             withSonarQubeEnv('SonarQube') {
+        //                 sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops-task-6 -Dsonar.sources=./src -Dsonar.javascript.node.maxspace=4096 -Dsonar.sourceEncoding=UTF-8 -X"
+        //             }
+        //         }
+        //     }
+        // }
+        stage('3-Build-Container') {
             steps {
-                script {
-                    def scannerHome = tool 'SonarQube Scanner'
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops-task-6 -Dsonar.sources=./src -Dsonar.javascript.node.maxspace=4096 -Dsonar.sourceEncoding=UTF-8 -X"
+                container('kaniko') {
+                    script {
+                        sh '''
+                            /kaniko/executor --dockerfile `pwd`/Dockerfile \
+                                             --context `pwd` \
+                                             --destination 156041410244.dkr.ecr.us-east-2.amazonaws.com/aws-devops-2024/task-6
+                        '''
                     }
-                }
+              } 
             }
         }
     }
